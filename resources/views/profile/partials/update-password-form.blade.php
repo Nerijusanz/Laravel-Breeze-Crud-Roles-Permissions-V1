@@ -9,6 +9,18 @@
         </p>
     </header>
 
+    @if (session('status') === 'password-updated')
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            x-init="setTimeout(() => show = false, 3000)"
+            class=""
+        ><x-validation-success /></div>
+    @endif
+
+    <x-validation-errors :errors="$errors->updatePassword" />
+
     <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
