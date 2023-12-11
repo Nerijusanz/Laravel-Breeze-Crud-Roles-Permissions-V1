@@ -25,6 +25,7 @@ Route::get('/dashboard', function () {
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => '\App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
 
+    Route::resource('users', \App\Http\Controllers\Admin\UsersController::class);
     Route::resource('tasks', \App\Http\Controllers\Admin\TasksController::class);
 });
 
