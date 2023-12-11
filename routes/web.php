@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => '\App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
 
     Route::resource('tasks', \App\Http\Controllers\Admin\TasksController::class);
 });
