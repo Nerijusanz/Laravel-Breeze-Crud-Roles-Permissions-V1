@@ -4,7 +4,6 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\User;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -26,6 +25,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required','string','min:2','max:255'],
             'email'   => ['required','unique:users,email,' . request()->route('user')->id],
+            'roles.*'  => ['required','integer','exists:App\Models\Role,id'],//array item validation
+            'roles'    => ['required','array']
         ];
     }
 }

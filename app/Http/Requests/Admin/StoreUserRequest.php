@@ -28,6 +28,8 @@ class StoreUserRequest extends FormRequest
             'name' => ['required','string','min:2','max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)],
             'password' => ['required',Password::defaults(),'confirmed'],
+            'roles.*'  => ['required','integer','exists:App\Models\Role,id'],//array item validation
+            'roles'    => ['required','array']
         ];
 
     }

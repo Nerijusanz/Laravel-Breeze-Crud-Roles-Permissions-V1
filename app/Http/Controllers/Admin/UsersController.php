@@ -11,6 +11,7 @@ use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 
 use App\Models\User;
+use App\Models\Role;
 
 class UsersController extends Controller
 {
@@ -29,7 +30,9 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::select('id','title')->get()->pluck('title','id');
+
+        return view('admin.users.create',compact('roles'));
     }
 
     /**
@@ -37,7 +40,8 @@ class UsersController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        User::create($request->validated());
+        $user = User::create($request->validated());
+        $user->roles()->sync($request->input('roles', []));
 
         return redirect()->route('admin.users.index');
     }
@@ -47,6 +51,8 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
+        $user->load('roles');
+
         return view('admin.users.show',compact('user'));
     }
 
@@ -55,7 +61,11 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit',compact('user'));
+        $roles = Role::select('id','title')->get()->pluck('title','id');
+
+        $user->load('roles');
+
+        return view('admin.users.edit',compact('roles','user'));
     }
 
     /**
@@ -63,8 +73,8 @@ class UsersController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-
         $user->update($request->validated());
+        $user->roles()->sync($request->input('roles', []));
 
         if(isset($request['password']) && $request['password'] != null){
 
