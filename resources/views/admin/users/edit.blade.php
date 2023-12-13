@@ -48,13 +48,13 @@
                         @enderror
                     </div>
                     <div class="px-4 py-5 bg-white sm:p-6">
-                        <label for="roles" class="block font-medium text-sm text-gray-700">Role</label>
-                        <select class="form-input rounded-md shadow-sm mt-1 block w-full" name="roles[]" id="roles" required>
-                            @foreach($roles as $id => $roles)
-                                <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || $user->roles->contains($id)) ? 'selected' : '' }}>{{ $roles }}</option>
+                        <label for="role_id" class="block font-medium text-sm text-gray-700">Role</label>
+                        <select class="form-input rounded-md shadow-sm mt-1 block w-full" name="role_id" id="role_id" required>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}" {{ $user->roles[0]->id == old('role_id', $role->id) ? 'selected' : '' }}>{{ $role->title }}</option>
                             @endforeach
                         </select>
-                        @error('roles')
+                        @error('role_id')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
