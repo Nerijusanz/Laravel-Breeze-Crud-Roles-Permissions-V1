@@ -3,8 +3,11 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 
 class StoreUserRequest extends FormRequest
@@ -14,6 +17,8 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        abort_if(Gate::denies('user_management_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return true;
     }
 
@@ -28,8 +33,7 @@ class StoreUserRequest extends FormRequest
             'name' => ['required','string','min:2','max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)],
             'password' => ['required',Password::defaults(),'confirmed'],
-            'roles.*'  => ['required','integer','exists:App\Models\Role,id'],//array item validation
-            'roles'    => ['required','array']
+            'role_id'  => ['required','integer','exists:App\Models\Role,id']
         ];
 
     }
